@@ -1,0 +1,88 @@
+/* styles.css - Modern, clean design */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f7f9fa;
+    color: #222;
+}
+nav {
+    background: #222;
+    padding: 0.5em 0;
+}
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+nav ul li {
+    margin: 0 1.5em;
+}
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+nav ul li a:hover {
+    color: #00bfae;
+}
+header {
+    text-align: center;
+    padding: 3em 1em 1em 1em;
+    background: linear-gradient(90deg, #00bfae 0%, #00796b 100%);
+    color: #fff;
+}
+main {
+    max-width: 800px;
+    margin: 2em auto;
+    padding: 1em;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+section {
+    margin-bottom: 2em;
+}
+.btn {
+    display: inline-block;
+    background: #00bfae;
+    color: #fff;
+    padding: 0.75em 2em;
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+.btn:hover {
+    background: #00796b;
+}
+footer {
+    text-align: center;
+    padding: 1em 0;
+    background: #222;
+    color: #fff;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+input, textarea {
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+#formMessage {
+    margin-top: 1em;
+    color: #00796b;
+    font-weight: bold;
+}
