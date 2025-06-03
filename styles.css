@@ -41,21 +41,33 @@ nav {
 .menu-toggle {
     display: none;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
     width: 30px;
-    height: 25px;
+    height: 22px;
     background: transparent;
     border: none;
     cursor: pointer;
     padding: 0;
-    z-index: 1001;
+    z-index: 10;
 }
 
 .menu-toggle span {
     width: 100%;
     height: 2px;
-    background-color: var(--text-color);
-    transition: all 0.3s ease;
+    background-color: var(--primary-color);
+    transition: all 0.3s ease-in-out;
+}
+
+.menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
 }
 
 @media (max-width: 768px) {
@@ -63,33 +75,46 @@ nav {
         display: flex;
     }
 
-    nav ul {
-        display: none;
+    .nav-links {
         position: fixed;
         top: 70px;
         left: 0;
         right: 0;
-        flex-direction: column;
         background: rgba(5, 5, 5, 0.95);
+        padding: 1rem;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease-in-out;
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        padding: 1rem;
-        gap: 1rem;
-        text-align: center;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    nav ul.active {
-        display: flex;
+    .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
     }
 
-    nav ul li {
+    .nav-links li {
         width: 100%;
+        text-align: center;
     }
 
-    nav ul li a {
+    .nav-links li a {
+        padding: 1rem;
         display: block;
-        padding: 0.5rem;
+        width: 100%;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+    }
+
+    .nav-links li a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
     }
 }
 
@@ -431,6 +456,7 @@ nav a:hover {
     background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-fill-color: transparent;
 }
 
 /* Sections */
@@ -445,6 +471,7 @@ h2 {
     background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-fill-color: transparent;
 }
 
 /* Services */
@@ -702,6 +729,7 @@ option {
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-fill-color: transparent;
 }
 
 .project-content {
@@ -789,6 +817,7 @@ option {
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-fill-color: transparent;
 }
 
 .requests-filters {
@@ -1300,4 +1329,15 @@ nav .active {
             scroll-behavior: auto !important;
         }
     }
+}
+
+/* Update gradient text styles */
+.hero h1,
+.project-hero h1,
+h2 {
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
 }
