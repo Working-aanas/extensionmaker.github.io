@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extension & Bot Developer | Professional Automation Solutions</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">AutomationPro</div>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Next-Gen Browser Extensions & Automation Solutions</h1>
+            <p>Transforming ideas into powerful automated solutions</p>
+            <a href="#contact" class="cta-button">Start Your Project</a>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <h2>Our Services</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fas fa-puzzle-piece"></i>
+                <h3>Browser Extensions</h3>
+                <p>Custom browser extensions to enhance your browsing experience and automate web tasks.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-robot"></i>
+                <h3>Automated Bots</h3>
+                <p>Intelligent bots that streamline your workflow and handle repetitive tasks.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="projects">
+        <h2>Featured Projects</h2>
+        <div class="projects-grid">
+            <a href="adobe-stock-automation.html" class="project-card">
+                <div class="project-image" style="background-image: url('https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')"></div>
+                <div class="project-content">
+                    <h3>Adobe Stock Automation</h3>
+                    <p>Streamline your Adobe Stock workflow with automated uploads, tagging, and portfolio management.</p>
+                    <span class="learn-more">Learn More →</span>
+                </div>
+            </a>
+            <a href="linkedin-job-finder.html" class="project-card">
+                <div class="project-image" style="background-image: url('https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')"></div>
+                <div class="project-content">
+                    <h3>LinkedIn Job Finder</h3>
+                    <p>Smart automation tool that finds and applies to relevant job postings based on your preferences.</p>
+                    <span class="learn-more">Learn More →</span>
+                </div>
+            </a>
+            <a href="instagram-unsend.html" class="project-card">
+                <div class="project-image" style="background-image: url('https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')"></div>
+                <div class="project-content">
+                    <h3>InstagramUnsend</h3>
+                    <p>Efficiently manage your Instagram messages with automated unsend capabilities and message management.</p>
+                    <span class="learn-more">Learn More →</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <h2>Start Your Project</h2>
+        <div class="contact-form">
+            <form id="projectForm">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group project-type-group">
+                    <label for="projectType">Project Type</label>
+                    <div class="custom-select">
+                        <select id="projectType" name="projectType" required>
+                            <option value="">Select project type</option>
+                            <optgroup label="Browser Extensions">
+                                <option value="chrome-extension">Chrome Extension</option>
+                                <option value="firefox-extension">Firefox Extension</option>
+                                <option value="edge-extension">Edge Extension</option>
+                                <option value="safari-extension">Safari Extension</option>
+                            </optgroup>
+                            <optgroup label="Automation Bots">
+                                <option value="web-scraping">Web Scraping Bot</option>
+                                <option value="social-media">Social Media Bot</option>
+                                <option value="data-automation">Data Automation Bot</option>
+                                <option value="custom-bot">Custom Bot Solution</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Project Description</label>
+                    <textarea id="description" name="description" rows="4" placeholder="Please describe what you want your extension/bot to do..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="budget">Expected Budget Range ($)</label>
+                    <input type="number" id="budget" name="budget" placeholder="Enter your budget" required>
+                </div>
+                <button type="submit" class="submit-button">Submit Request</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 AutomationPro. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
