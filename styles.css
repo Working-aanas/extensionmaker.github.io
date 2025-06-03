@@ -398,3 +398,180 @@ option {
 .project-cta h2 {
     margin-bottom: 2rem;
 }
+
+/* Requests Page Styles */
+.requests-page {
+    padding: 120px 5% 60px;
+    min-height: calc(100vh - 100px);
+}
+
+.requests-page h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.requests-filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.requests-filters input,
+.requests-filters select {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-color);
+}
+
+.clear-button {
+    padding: 0.8rem 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.clear-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.requests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.request-card {
+    background: var(--card-background);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.request-card:hover {
+    transform: translateY(-5px);
+}
+
+.request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 1rem;
+}
+
+.request-id {
+    font-size: 0.8rem;
+    color: var(--primary-color);
+}
+
+.request-date {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.request-type {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    background: rgba(0, 255, 157, 0.1);
+    border-radius: 15px;
+    font-size: 0.9rem;
+    color: var(--primary-color);
+    margin: 0.5rem 0;
+}
+
+.request-details {
+    margin-top: 1rem;
+}
+
+.request-details h3 {
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.request-details p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.request-budget {
+    margin-top: 1rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.no-requests {
+    text-align: center;
+    padding: 3rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.no-requests i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+nav .active {
+    color: var(--primary-color);
+}
+
+/* Request Actions */
+.request-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+}
+
+.action-button {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.action-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.action-button.completed {
+    background: rgba(0, 255, 157, 0.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.action-button.delete {
+    background: rgba(255, 0, 0, 0.1);
+    border-color: rgba(255, 0, 0, 0.3);
+    color: #ff4444;
+}
+
+.action-button.delete:hover {
+    background: rgba(255, 0, 0, 0.2);
+}
+
+#statusFilter {
+    min-width: 150px;
+    flex: 0.5;
+}

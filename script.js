@@ -63,17 +63,33 @@ document.addEventListener('DOMContentLoaded', () => {
         requests.push(data);
         localStorage.setItem('projectRequests', JSON.stringify(requests));
 
-        // Save to file
+        // Create JSON file content
         const exportData = JSON.stringify(requests, null, 2);
         const blob = new Blob([exportData], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'project-requests.json';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        
+        // Create form data for upload
+        const formData = new FormData();
+        formData.append('file', blob, 'project-requests.json');
+        
+        try {
+            // Upload to gofile.io
+            const response = await fetch('https://api.gofile.io/uploadFile', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'UqznlQMZJSePULlfp8KwFCC7mLYjsOAU'
+                },
+                body: formData
+            });
+
+            const result = await response.json();
+            if (result.status === 'ok') {
+                console.log('File uploaded successfully:', result.data.downloadPage);
+            } else {
+                console.error('Upload failed:', result.status);
+            }
+        } catch (error) {
+            console.error('Error uploading file:', error);
+        }
     }
 
     // Add animations
