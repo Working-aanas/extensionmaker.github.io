@@ -1,5 +1,51 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Admin password - change this to your desired password
+    const ADMIN_PASSWORD = 'HDAnass4326277';
+    
+    const loginOverlay = document.getElementById('loginOverlay');
+    const requestsPage = document.querySelector('.requests-page');
+    const adminPassword = document.getElementById('adminPassword');
+    const loginButton = document.getElementById('loginButton');
+    const loginError = document.getElementById('loginError');
     const requestsContainer = document.getElementById('requestsContainer');
+
+    // Check if already authenticated
+    function checkAuth() {
+        const isAuthenticated = sessionStorage.getItem('adminAuthenticated');
+        if (isAuthenticated === 'true') {
+            showRequestsPage();
+        }
+    }
+
+    // Handle login
+    loginButton.addEventListener('click', () => {
+        if (adminPassword.value === ADMIN_PASSWORD) {
+            sessionStorage.setItem('adminAuthenticated', 'true');
+            showRequestsPage();
+            adminPassword.value = '';
+        } else {
+            loginError.textContent = 'Incorrect password';
+            setTimeout(() => {
+                loginError.textContent = '';
+            }, 3000);
+        }
+    });
+
+    // Handle Enter key in password field
+    adminPassword.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            loginButton.click();
+        }
+    });
+
+    function showRequestsPage() {
+        loginOverlay.style.display = 'none';
+        requestsPage.style.display = 'block';
+        loadRequests();
+    }
+
+    // Check authentication on load
+    checkAuth();
     const searchInput = document.getElementById('searchInput');
     const typeFilter = document.getElementById('typeFilter');
     const clearFiltersBtn = document.getElementById('clearFilters');

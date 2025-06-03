@@ -19,7 +19,18 @@
         </ul>
     </nav>
 
-    <div class="requests-page">
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-container">
+            <h2>Admin Login</h2>
+            <div class="login-form">
+                <input type="password" id="adminPassword" placeholder="Enter admin password">
+                <button id="loginButton" class="login-button">Login</button>
+                <p id="loginError" class="login-error"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="requests-page" style="display: none;">
         <h1>Project Requests</h1>
         
         <div class="requests-filters">
