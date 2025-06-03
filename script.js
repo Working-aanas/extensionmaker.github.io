@@ -1,4 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Mobile Menu Toggle
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navMenu = document.querySelector('nav ul');
+    
+    if (menuToggle && navMenu) {
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('nav')) {
+                navMenu.classList.remove('active');
+                menuToggle.classList.remove('active');
+            }
+        });
+
+        // Close menu when clicking a link
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                menuToggle.classList.remove('active');
+            });
+        });
+    }
+
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -58,38 +85,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Save request
-    async function saveRequest(data) {
+    function saveRequest(data) {
         const requests = JSON.parse(localStorage.getItem('projectRequests') || '[]');
         requests.push(data);
         localStorage.setItem('projectRequests', JSON.stringify(requests));
-
-        // Create JSON file content
-        const exportData = JSON.stringify(requests, null, 2);
-        const blob = new Blob([exportData], { type: 'application/json' });
-        
-        // Create form data for upload
-        const formData = new FormData();
-        formData.append('file', blob, 'project-requests.json');
-        
-        try {
-            // Upload to gofile.io
-            const response = await fetch('https://api.gofile.io/uploadFile', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'UqznlQMZJSePULlfp8KwFCC7mLYjsOAU'
-                },
-                body: formData
-            });
-
-            const result = await response.json();
-            if (result.status === 'ok') {
-                console.log('File uploaded successfully:', result.data.downloadPage);
-            } else {
-                console.error('Upload failed:', result.status);
-            }
-        } catch (error) {
-            console.error('Error uploading file:', error);
-        }
     }
 
     // Add animations
