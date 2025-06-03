@@ -18,6 +18,7 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     line-height: 1.6;
+    padding-top: 70px;
 }
 
 /* Navigation */
@@ -25,22 +26,57 @@ nav {
     position: fixed;
     top: 0;
     width: 100%;
-    padding: 1.5rem 5%;
+    padding: 0.5rem 5%;
     background: rgba(5, 5, 5, 0.95);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     z-index: 1000;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
 }
 
 .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.logo a {
+    display: block;
+    text-decoration: none;
+}
+
+.logo img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0 10px rgba(0, 255, 157, 0.2));
+}
+
+.logo:hover img {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 15px rgba(0, 255, 157, 0.4));
+}
+
+/* Responsive logo size */
+@media (max-width: 768px) {
+    .logo img {
+        height: 32px;
+    }
+    
+    nav {
+        padding: 0.5rem 3%;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo img {
+        height: 28px;
+    }
 }
 
 nav ul {
@@ -71,6 +107,7 @@ nav a:hover {
     background-size: cover;
     background-position: center;
     position: relative;
+    margin-top: -70px;
 }
 
 .hero::after {
@@ -140,26 +177,50 @@ h2 {
 /* Projects */
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
+    padding: 1rem 0;
+}
+
+@media (min-width: 1200px) {
+    .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 }
 
 .project-card {
     background: var(--card-background);
     border-radius: 15px;
     overflow: hidden;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .project-card:hover {
     transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0, 255, 157, 0.1);
 }
 
 .project-image {
     height: 200px;
-    background-size: cover;
+    background-size: contain;
     background-position: center;
+    background-repeat: no-repeat;
+    background-color: var(--card-background);
+    transition: transform 0.3s ease;
+}
+
+/* Specific styling for Adobe Stock image */
+.project-card:first-child .project-image {
+    padding: 20px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .project-content {
