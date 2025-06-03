@@ -126,6 +126,90 @@ nav a:hover {
     z-index: 1;
 }
 
+.hero-content-wrapper {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.hero-animation {
+    margin-top: 2rem;
+    font-size: 3rem;
+    color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+}
+
+.hero-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.hero-particles::before,
+.hero-particles::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at center, var(--primary-color) 1px, transparent 1px),
+        radial-gradient(circle at center, var(--accent-color) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: 0 0, 20px 20px;
+    opacity: 0.1;
+    animation: particleShift 20s linear infinite;
+}
+
+.hero-particles::after {
+    animation-delay: -10s;
+    animation-direction: reverse;
+}
+
+@keyframes particleShift {
+    0% {
+        transform: translateX(0) translateY(0);
+    }
+    100% {
+        transform: translateX(-40px) translateY(-40px);
+    }
+}
+
+.spinning {
+    animation: spin 4s linear infinite;
+}
+
+.floating {
+    animation: float 3s ease-in-out infinite;
+}
+
+.floating-delayed {
+    animation: float 3s ease-in-out infinite;
+    animation-delay: 1.5s;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
 .hero h1 {
     font-size: 3.5rem;
     margin-bottom: 1.5rem;
@@ -700,4 +784,223 @@ nav .active {
     font-size: 0.9rem;
     min-height: 20px;
     margin: 0;
+}
+
+/* Video Container Styles */
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    margin: 2rem auto;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+}
+
+.video-container:hover {
+    transform: scale(1.01);
+    box-shadow: 0 6px 30px rgba(0, 255, 157, 0.2);
+}
+
+/* Project Hero Animation Styles */
+.hero-content-wrapper {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.hero-animation {
+    margin-top: 2rem;
+    font-size: 3rem;
+    color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+}
+
+.hero-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.hero-particles::before,
+.hero-particles::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at center, var(--primary-color) 1px, transparent 1px),
+        radial-gradient(circle at center, var(--accent-color) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: 0 0, 20px 20px;
+    opacity: 0.1;
+    animation: particleShift 20s linear infinite;
+}
+
+.hero-particles::after {
+    animation-delay: -10s;
+    animation-direction: reverse;
+}
+
+@keyframes particleShift {
+    0% {
+        transform: translateX(0) translateY(0);
+    }
+    100% {
+        transform: translateX(-40px) translateY(-40px);
+    }
+}
+
+.spinning {
+    animation: spin 4s linear infinite;
+}
+
+.floating {
+    animation: float 3s ease-in-out infinite;
+}
+
+.floating-delayed {
+    animation: float 3s ease-in-out infinite;
+    animation-delay: 1.5s;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Pricing Section Styles */
+.pricing-section {
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.pricing-card {
+    background: var(--card-background);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pricing-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0, 255, 157, 0.1);
+}
+
+.pricing-card.featured {
+    background: linear-gradient(45deg, rgba(0, 255, 157, 0.1), rgba(112, 0, 255, 0.1));
+    border: 1px solid var(--primary-color);
+}
+
+.featured-tag {
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    color: var(--secondary-color);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.pricing-card h3 {
+    color: var(--text-color);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.price {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+.price span {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.pricing-card ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2rem;
+}
+
+.pricing-card ul li {
+    margin: 1rem 0;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.pricing-card ul li i {
+    color: var(--primary-color);
+    margin-right: 0.5rem;
+}
+
+.pricing-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    color: var(--secondary-color);
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pricing-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 255, 157, 0.2);
+}
+
+@media (min-width: 1200px) {
+    .pricing-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Update existing project hero styles */
+.project-hero {
+    position: relative;
+    overflow: hidden;
 }
