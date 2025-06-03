@@ -1236,3 +1236,68 @@ nav .active {
     position: relative;
     overflow: hidden;
 }
+
+/* Touch ripple effect */
+.ripple {
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(0);
+}
+
+.ripple::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, var(--primary-color) 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10);
+    opacity: 0;
+    transition: transform 0.5s, opacity 0.5s;
+}
+
+.ripple:active::after {
+    transform: scale(0);
+    opacity: 0.3;
+    transition: 0s;
+}
+
+/* Progressive image loading */
+.project-image {
+    position: relative;
+    background-color: var(--card-background);
+    transition: filter 0.3s ease;
+}
+
+.project-image.loading {
+    filter: blur(10px);
+}
+
+/* Mobile performance optimizations */
+@media (max-width: 768px) {
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .hero,
+    .project-card,
+    .service-card {
+        backface-visibility: hidden;
+        perspective: 1000px;
+        transform-style: preserve-3d;
+    }
+
+    /* Optimize animations for mobile */
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+}
