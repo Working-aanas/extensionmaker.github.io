@@ -1,11 +1,13 @@
-my-portfolio-website
-├── src
-│   ├── App.tsx
-│   └── main.tsx
-├── .github
-│   └── workflows
-│       └── deploy.yml
-├── package.json
-├── vite.config.ts
-├── index.html
-└── README.md
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
+
+export default defineConfig({
+  base: '/my-portfolio-website/', // Change this to match your repository name
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+});
