@@ -42,13 +42,24 @@
             <input type="text" id="searchInput" placeholder="Search requests...">
             <select id="typeFilter">
                 <option value="">All Types</option>
-                <option value="browser-extension">Browser Extension</option>
-                <optgroup label="Automation Bots">
+                <optgroup label="Requests">
+                    <option value="browser-extension">Browser Extension</option>
                     <option value="web-scraping">Web Scraping Bot</option>
                     <option value="social-media">Social Media Bot</option>
                     <option value="data-automation">Data Automation Bot</option>
                     <option value="custom-bot">Custom Bot Solution</option>
                 </optgroup>
+                <optgroup label="Orders">
+                    <option value="adobe-stock-automation">Adobe Stock Automation</option>
+                    <option value="linkedin-job-finder">LinkedIn Job Finder</option>
+                    <option value="instagram-unsend">Instagram Unsend</option>
+                    <option value="medium-auto-publisher">Medium Auto-Publisher</option>
+                </optgroup>
+            </select>
+            <select id="requestTypeFilter">
+                <option value="">All Categories</option>
+                <option value="request">General Requests</option>
+                <option value="order">Orders</option>
             </select>
             <button id="clearFilters" class="clear-button">Clear Filters</button>
         </div>

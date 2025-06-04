@@ -15,7 +15,12 @@
                 <img src="assets/Logo.png" alt="Extension & Automation Maker Logo">
             </a>
         </div>
-        <ul>
+        <button class="menu-toggle" aria-label="Toggle navigation menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links">
             <li><a href="index.html#home">Home</a></li>
             <li><a href="index.html#services">Services</a></li>
             <li><a href="index.html#projects">Projects</a></li>
@@ -80,7 +85,7 @@
                             <li><i class="fas fa-check"></i> Auto-formatting</li>
                             <li><i class="fas fa-check"></i> Email support</li>
                         </ul>
-                        <a href="index.html#contact" class="pricing-button">Get Started</a>
+                        <a href="#order" class="pricing-button">Get Started</a>
                     </div>
                     <div class="pricing-card featured">
                         <div class="featured-tag">Most Popular</div>
@@ -92,7 +97,7 @@
                             <li><i class="fas fa-check"></i> Advanced analytics</li>
                             <li><i class="fas fa-check"></i> Priority support</li>
                         </ul>
-                        <a href="index.html#contact" class="pricing-button">Get Started</a>
+                        <a href="#order" class="pricing-button">Get Started</a>
                     </div>
                     <div class="pricing-card">
                         <h3>Agency</h3>
@@ -103,7 +108,7 @@
                             <li><i class="fas fa-check"></i> Custom AI features</li>
                             <li><i class="fas fa-check"></i> 24/7 support</li>
                         </ul>
-                        <a href="index.html#contact" class="pricing-button">Get Started</a>
+                        <a href="#order" class="pricing-button">Get Started</a>
                     </div>
                 </div>
             </section>
@@ -124,7 +129,53 @@
 
             <section class="project-cta">
                 <h2>Ready to Revolutionize Your Content Publishing?</h2>
-                <a href="index.html#contact" class="cta-button">Get Started</a>
+                <a href="#order" class="cta-button">Get Started</a>
+            </section>
+
+            <section id="order" class="order-section">
+                <h2>Place Your Order</h2>
+                <div class="order-form">
+                    <form id="projectOrderForm" class="contact-form">
+                        <input type="hidden" id="projectType" name="projectType" value="medium-auto-publisher">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group email-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="plan">Select Plan</label>
+                            <div class="custom-select">
+                                <select id="plan" name="plan" required>
+                                    <option value="">Choose your plan</option>
+                                    <option value="starter">Starter - $14.99/month</option>
+                                    <option value="professional">Professional - $29.99/month</option>
+                                    <option value="agency">Agency - $79.99/month</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="publishingFrequency">Publishing Frequency</label>
+                            <select id="publishingFrequency" name="publishingFrequency">
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="biweekly">Bi-weekly</option>
+                                <option value="monthly">Monthly</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="contentCategories">Content Categories</label>
+                            <textarea id="contentCategories" name="contentCategories" rows="2" placeholder="e.g., Technology, Business, AI, Marketing..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="requirements">Special Requirements</label>
+                            <textarea id="requirements" name="requirements" rows="4" placeholder="Any specific automation rules or publishing preferences..."></textarea>
+                        </div>
+                        <button type="submit" class="submit-button">Submit Order</button>
+                    </form>
+                </div>
             </section>
         </div>
     </div>

@@ -1,5 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Mobile Menu Toggle
+    initializeMenuToggle();
+    
+    // Initialize all forms
+    initializeForms();
+    
+    // Initialize animations if they exist
+    if (typeof initializeAnimations === 'function') {
+        initializeAnimations();
+    }
+});
+
+// Initialize menu toggle functionality
+function initializeMenuToggle() {
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
     
@@ -42,336 +55,300 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+}
 
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
+// Initialize all forms in the page
+function initializeForms() {
+    // Get all forms on the page
+    const projectForm = document.getElementById('projectForm');
+    const orderForm = document.getElementById('projectOrderForm');
+    
+    // Initialize contact form if it exists
+    if (projectForm) {
+        handleFormSubmission(projectForm);
+    }
+    
+    // Initialize order form if it exists
+    if (orderForm) {
+        handleFormSubmission(orderForm);
+    }
+}
+
+// Smooth scrolling for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetElement = document.querySelector(this.getAttribute('href'));
+        if (targetElement) {
+            targetElement.scrollIntoView({
                 behavior: 'smooth'
             });
-        });
+        }
+    });
+});
+
+// Form submission handling
+const form = document.getElementById('projectForm');
+if (form) {
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Get form data
+        const formData = new FormData(form);
+        const data = {
+            ...Object.fromEntries(formData.entries()),
+            timestamp: new Date().toISOString(),
+            id: generateRequestId()
+        };
+
+        // Store in localStorage and export
+        saveRequest(data);
+
+        // Show submission feedback
+        try {
+            alert('Thank you for your submission! We will contact you soon.');
+            form.reset();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('There was an error submitting your request. Please try again later.');
+        }
+    });
+}
+
+// Function to show success message
+function showSuccessMessage(message) {
+    const successMessage = document.createElement('div');
+    successMessage.className = 'success-message';
+    successMessage.textContent = message;
+    document.body.appendChild(successMessage);
+
+    // Remove the message after 3 seconds
+    setTimeout(() => {
+        successMessage.style.opacity = '0';
+        setTimeout(() => {
+            document.body.removeChild(successMessage);
+        }, 300);
+    }, 3000);
+}
+
+// Function to show popup notification
+function showPopupNotification(title, message, type = 'success') {
+    // Remove any existing popup
+    const existingPopup = document.querySelector('.popup-notification');
+    if (existingPopup) {
+        existingPopup.remove();
+    }
+
+    // Create popup element
+    const popup = document.createElement('div');
+    popup.className = 'popup-notification';
+    
+    // Set icon based on type
+    const icon = type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation';
+    
+    popup.innerHTML = `
+        <i class="fas ${icon}"></i>
+        <div class="popup-content">
+            <div class="popup-title">${title}</div>
+            <div class="popup-message">${message}</div>
+        </div>
+        <button class="close-popup" aria-label="Close notification">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+
+    // Add to document
+    document.body.appendChild(popup);
+
+    // Trigger animation
+    setTimeout(() => popup.classList.add('show'), 10);
+
+    // Add close button handler
+    const closeBtn = popup.querySelector('.close-popup');
+    closeBtn.addEventListener('click', () => {
+        popup.classList.remove('show');
+        setTimeout(() => popup.remove(), 300);
     });
 
-    // Form submission handling
-    const form = document.getElementById('projectForm');
-    if (form) {
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (document.body.contains(popup)) {
+            popup.classList.remove('show');
+            setTimeout(() => popup.remove(), 300);
+        }
+    }, 5000);
+}
 
-            // Get form data
+// Form validation and helper functions
+function validateField(field) {
+    const value = field.value.trim();
+    const isRequired = field.hasAttribute('required');
+    const type = field.type;
+    
+    // Remove existing validation styles
+    field.classList.remove('success', 'error');
+    
+    if (isRequired && !value) {
+        field.classList.add('error');
+        return false;
+    }
+    
+    if (value) {
+        switch (type) {
+            case 'email':
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(value)) {
+                    field.classList.add('error');
+                    return false;
+                }
+                break;
+            case 'number':
+                if (isNaN(value)) {
+                    field.classList.add('error');
+                    return false;
+                }
+                break;
+        }
+    }
+    
+    field.classList.add('success');
+    return true;
+}
+
+function showFormFeedback(form, message, type) {
+    let feedback = form.querySelector('.form-feedback');
+    if (!feedback) {
+        feedback = document.createElement('div');
+        feedback.className = 'form-feedback';
+        form.insertBefore(feedback, form.firstChild);
+    }
+    
+    feedback.textContent = message;
+    feedback.className = `form-feedback ${type}`;
+    feedback.style.display = 'block';
+    
+    setTimeout(() => {
+        feedback.style.opacity = '0';
+        setTimeout(() => {
+            feedback.style.display = 'none';
+            feedback.style.opacity = '1';
+        }, 300);
+    }, 3000);
+}
+
+// Save request/order to localStorage
+function saveRequest(data) {
+    if (!data.type) {
+        data.type = data.plan ? 'order' : 'request';
+    }
+    if (!data.status) {
+        data.status = 'pending';
+    }
+    const requests = JSON.parse(localStorage.getItem('projectRequests') || '[]');
+    requests.push(data);
+    localStorage.setItem('projectRequests', JSON.stringify(requests));
+}
+
+// Generate unique ID for requests
+function generateRequestId() {
+    return Date.now().toString(36) + Math.random().toString(36).substring(2);
+}
+
+// Enhanced form submission handler for all forms
+function handleFormSubmission(form) {
+    if (!form) return;
+
+    // Add validation on input
+    form.querySelectorAll('input, select, textarea').forEach(field => {
+        // Add validation on blur and input
+        field.addEventListener('blur', () => validateField(field));
+        field.addEventListener('input', () => {
+            if (field.classList.contains('error')) {
+                validateField(field);
+            }
+            field.classList.toggle('has-content', field.value.trim() !== '');
+        });
+        
+        // Initialize has-content class if field has value
+        if (field.value.trim()) {
+            field.classList.add('has-content');
+        }
+    });
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Validate all fields
+        const fields = form.querySelectorAll('input, select, textarea');
+        const isValid = Array.from(fields).every(field => validateField(field));
+
+        if (!isValid) {
+            showFormFeedback(form, 'Please fill in all required fields correctly.', 'error');
+            return;
+        }
+
+        const submitButton = form.querySelector('.submit-button');
+        submitButton.classList.add('loading');
+        submitButton.disabled = true;
+
+        try {
             const formData = new FormData(form);
             const data = {
                 ...Object.fromEntries(formData.entries()),
                 timestamp: new Date().toISOString(),
-                id: generateRequestId()
+                id: generateRequestId(),
+                type: form.id === 'projectOrderForm' ? 'order' : 'request'
             };
 
-            // Store in localStorage and export
+            // Simulate network delay for better UX
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // Store in localStorage
             saveRequest(data);
 
-            // Show submission feedback
-            try {
-                alert('Thank you for your submission! We will contact you soon.');
-                form.reset();
-            } catch (error) {
-                console.error('Error:', error);
-                alert('There was an error submitting your request. Please try again later.');
+            // Show popup notification
+            if (data.type === 'order') {
+                showPopupNotification(
+                    'Order Submitted Successfully!',
+                    'Thank you for your order. We will contact you soon to get started.'
+                );
+            } else {
+                showPopupNotification(
+                    'Request Received!',
+                    'Thank you for your request. We will review it and get back to you soon.'
+                );
             }
-        });
-    }
-
-    // Helper function for generating unique IDs
-    function generateRequestId() {
-        return 'req_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-    }
-
-    // Function to export requests
-    function exportRequests() {
-        const requests = JSON.parse(localStorage.getItem('projectRequests') || '[]');
-        const exportData = JSON.stringify(requests, null, 2);
-        const blob = new Blob([exportData], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'project-requests.json';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }
-
-    // Save request
-    function saveRequest(data) {
-        const requests = JSON.parse(localStorage.getItem('projectRequests') || '[]');
-        requests.push(data);
-        localStorage.setItem('projectRequests', JSON.stringify(requests));
-    }
-
-    // Add animations
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    });
-
-    document.querySelectorAll('.service-card, .project-card').forEach((element) => {
-        element.style.opacity = '0';
-        element.style.transform = 'translateY(20px)';
-        element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        observer.observe(element);
-    });
-
-    // Add parallax effect to hero section
-    window.addEventListener('scroll', () => {
-        const hero = document.querySelector('.hero');
-        const scrolled = window.pageYOffset;
-        hero.style.backgroundPositionY = scrolled * 0.5 + 'px';
-    });
-
-    // Lazy loading for project images
-    function lazyLoadImages() {
-        const projectImages = document.querySelectorAll('.project-image[data-src]');
-        
-        const imageObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.style.backgroundImage = `url('${img.dataset.src}')`;
-                    img.classList.remove('loading');
-                    imageObserver.unobserve(img);
-                }
-            });
-        }, {
-            rootMargin: '50px'
-        });
-
-        projectImages.forEach(img => {
-            img.classList.add('loading');
-            imageObserver.observe(img);
-        });
-    }
-
-    // Handle touch gestures for project cards
-    function initTouchGestures() {
-        const projectsGrids = document.querySelectorAll('.projects-grid');
-        
-        projectsGrids.forEach(grid => {
-            let startX, scrollLeft, isDragging = false;
-
-            const startDragging = (e) => {
-                isDragging = true;
-                grid.classList.add('grabbing');
-                startX = e.type === 'mousedown' ? e.pageX : e.touches[0].pageX;
-                scrollLeft = grid.scrollLeft;
-            };
-
-            const stopDragging = () => {
-                isDragging = false;
-                grid.classList.remove('grabbing');
-            };
-
-            const drag = (e) => {
-                if (!isDragging) return;
-                e.preventDefault();
-                const x = e.type === 'mousemove' ? e.pageX : e.touches[0].pageX;
-                const dist = x - startX;
-                grid.scrollLeft = scrollLeft - dist;
-            };
-
-            // Touch events
-            grid.addEventListener('touchstart', startDragging);
-            grid.addEventListener('touchend', stopDragging);
-            grid.addEventListener('touchmove', drag);
-
-            // Mouse events
-            grid.addEventListener('mousedown', startDragging);
-            grid.addEventListener('mouseup', stopDragging);
-            grid.addEventListener('mouseleave', stopDragging);
-            grid.addEventListener('mousemove', drag);
-        });
-    }
-
-    // Enhanced mobile menu handling
-    function initMobileMenu() {
-        const navLinks = document.querySelectorAll('nav ul li a');
-        const menuToggle = document.querySelector('.menu-toggle');
-        const navMenu = document.querySelector('nav ul');
-
-        navLinks.forEach(link => {
-            link.addEventListener('touchstart', function() {
-                this.style.backgroundColor = 'rgba(var(--primary-color), 0.1)';
-            });
-
-            link.addEventListener('touchend', function() {
-                this.style.backgroundColor = '';
-            });
-        });
-
-        // Double-tap prevention
-        let lastTap = 0;
-        menuToggle.addEventListener('touchend', (e) => {
-            const currentTime = new Date().getTime();
-            const tapLength = currentTime - lastTap;
-            if (tapLength < 500 && tapLength > 0) {
-                e.preventDefault();
-                return;
-            }
-            lastTap = currentTime;
-        });
-
-        // Close menu when tapping outside
-        document.addEventListener('touchstart', (e) => {
-            if (navMenu.classList.contains('active') && !e.target.closest('nav')) {
-                e.preventDefault();
-                navMenu.classList.remove('active');
-                menuToggle.classList.remove('active');
-            }
-        });
-    }
-
-    // Remove swipe hint after first interaction
-    function handleSwipeHint() {
-        const projectsGrids = document.querySelectorAll('.projects-grid');
-        projectsGrids.forEach(grid => {
-            const removeHint = () => {
-                grid.style.setProperty('--show-swipe-hint', 'none');
-                grid.removeEventListener('scroll', removeHint);
-            };
-            grid.addEventListener('scroll', removeHint);
-        });
-    }
-
-    // Active section highlighting for mobile
-    function initActiveSectionHighlight() {
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('nav ul li a');
-
-        const highlightActiveSection = () => {
-            const scrollY = window.scrollY;
             
-            sections.forEach(section => {
-                const sectionHeight = section.offsetHeight;
-                const sectionTop = section.offsetTop - 100;
-                const sectionId = section.getAttribute('id');
-                
-                if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                    navLinks.forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('href') === `#${sectionId}`) {
-                            link.classList.add('active');
-                        }
-                    });
-                }
+            // Reset form and validation states
+            form.reset();
+            form.querySelectorAll('.form-group').forEach(group => {
+                group.classList.remove('success', 'error');
             });
-        };
-
-        window.addEventListener('scroll', highlightActiveSection);
-    }
-
-    // Add ripple effect to interactive elements
-    function addRippleEffect() {
-        const interactiveElements = document.querySelectorAll('.project-card, .service-card, .submit-button, .cta-button');
-        
-        interactiveElements.forEach(element => {
-            element.classList.add('ripple');
-        });
-    }
-
-    // Optimize image loading
-    function optimizeImages() {
-        const images = document.querySelectorAll('.project-image');
-        
-        // Create tiny thumbnails for initial load
-        images.forEach(img => {
-            const dataSrc = img.getAttribute('data-src');
-            if (dataSrc) {
-                const tinyThumb = new Image();
-                tinyThumb.src = dataSrc + '&w=20'; // Request a tiny version
-                tinyThumb.onload = () => {
-                    img.style.backgroundImage = `url('${tinyThumb.src}')`;
-                    img.classList.add('loading');
-                };
-            }
-        });
-
-        // Load full images when in viewport
-        const imageObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    const dataSrc = img.getAttribute('data-src');
-                    if (dataSrc) {
-                        const fullImg = new Image();
-                        fullImg.src = dataSrc;
-                        fullImg.onload = () => {
-                            img.style.backgroundImage = `url('${dataSrc}')`;
-                            img.classList.remove('loading');
-                        };
-                        img.removeAttribute('data-src');
-                        imageObserver.unobserve(img);
-                    }
-                }
+            form.querySelectorAll('input, select, textarea').forEach(field => {
+                field.classList.remove('has-content');
             });
-        }, {
-            rootMargin: '50px 0px',
-            threshold: 0.1
-        });
 
-        images.forEach(img => {
-            if (img.getAttribute('data-src')) {
-                imageObserver.observe(img);
-            }
-        });
-    }
+            // Scroll to top with smooth behavior
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
 
-    // Add smooth momentum scrolling for iOS
-    function addMomentumScrolling() {
-        const scrollableElements = document.querySelectorAll('.projects-grid');
-        scrollableElements.forEach(element => {
-            element.style.webkitOverflowScrolling = 'touch';
-        });
-    }
-
-    // Handle mobile network conditions
-    function handleNetworkConditions() {
-        if ('connection' in navigator) {
-            const connection = navigator.connection;
-            
-            if (connection.saveData) {
-                // Data saver is enabled
-                const images = document.querySelectorAll('.project-image');
-                images.forEach(img => {
-                    const dataSrc = img.getAttribute('data-src');
-                    if (dataSrc) {
-                        // Load lower quality images
-                        img.setAttribute('data-src', dataSrc + '&q=60&w=400');
-                    }
-                });
+            // Update form progress if the function exists
+            if (typeof updateFormProgress === 'function') {
+                updateFormProgress();
             }
 
-            connection.addEventListener('change', () => {
-                // Adjust loading strategy based on network changes
-                if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
-                    document.body.classList.add('slow-network');
-                } else {
-                    document.body.classList.remove('slow-network');
-                }
-            });
+        } catch (error) {
+            console.error('Error:', error);
+            showPopupNotification(
+                'Submission Error',
+                'There was an error submitting your form. Please try again.',
+                'error'
+            );
+        } finally {
+            submitButton.classList.remove('loading');
+            submitButton.disabled = false;
         }
-    }
-
-    // Initialize all mobile enhancements
-    lazyLoadImages();
-    initTouchGestures();
-    initMobileMenu();
-    handleSwipeHint();
-    initActiveSectionHighlight();
-    addRippleEffect();
-    optimizeImages();
-    addMomentumScrolling();
-    handleNetworkConditions();
-});
+    });
+}

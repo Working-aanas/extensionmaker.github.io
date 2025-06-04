@@ -78,7 +78,7 @@
                             <li><i class="fas fa-check"></i> AI-powered title & keywords generation</li>
                             <li><i class="fas fa-check"></i> Basic support</li>
                         </ul>
-                        <a href="index.html#contact" class="pricing-button">Get Started</a>
+                        <a href="#order" class="pricing-button">Get Started</a>
                     </div>
                     <div class="pricing-card featured">
                         <div class="featured-tag">Most Popular</div>
@@ -89,7 +89,7 @@
                             <li><i class="fas fa-check"></i> Priority support</li>
                             <li><i class="fas fa-check"></i> Custom API integration</li>
                         </ul>
-                        <a href="index.html#contact" class="pricing-button">Get Started</a>
+                        <a href="#order" class="pricing-button">Get Started</a>
                     </div>
                     <div class="pricing-card">
                         <h3>Enterprise</h3>
@@ -99,7 +99,7 @@
                             <li><i class="fas fa-check"></i> 24/7 Premium support</li>
                             <li><i class="fas fa-check"></i> Custom development</li>
                         </ul>
-                        <a href="index.html#contact" class="pricing-button">Contact Us</a>
+                        <a href="#order" class="pricing-button">Contact Us</a>
                     </div>
                 </div>
             </section>
@@ -120,7 +120,40 @@
 
             <section class="project-cta">
                 <h2>Ready to Automate Your Workflow?</h2>
-                <a href="index.html#contact" class="cta-button">Get Started</a>
+                <a href="#order" class="cta-button">Get Started</a>
+            </section>
+
+            <section id="order" class="order-section">
+                <h2>Place Your Order</h2>
+                <div class="order-form">
+                    <form id="projectOrderForm" class="contact-form">
+                        <input type="hidden" id="projectType" name="projectType" value="adobe-stock-automation">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="plan">Select Plan</label>
+                            <div class="custom-select">
+                                <select id="plan" name="plan" required>
+                                    <option value="">Choose your plan</option>
+                                    <option value="basic">Basic - $19.99/month</option>
+                                    <option value="professional">Professional - $29.99/month</option>
+                                    <option value="enterprise">Enterprise - Custom Price</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="requirements">Special Requirements</label>
+                            <textarea id="requirements" name="requirements" rows="4" placeholder="Any specific features or requirements you need..."></textarea>
+                        </div>
+                        <button type="submit" class="submit-button">Submit Order</button>
+                    </form>
+                </div>
             </section>
         </div>
     </div>

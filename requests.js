@@ -55,8 +55,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load requests from localStorage
     function loadRequests() {
-        allRequests = JSON.parse(localStorage.getItem('projectRequests') || '[]');
-        filterAndDisplayRequests();
+        const requests = JSON.parse(localStorage.getItem('projectRequests') || '[]');
+        const requestsContainer = document.getElementById('requestsContainer');
+        const noRequests = document.getElementById('noRequests');
+
+        if (requests.length === 0) {
+            requestsContainer.innerHTML = '';
+            noRequests.style.display = 'flex';
+            return;
+        }
+
+        noRequests.style.display = 'none';
+        requestsContainer.innerHTML = requests
+            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+            .map(request => createRequestCard(request))
+            .join('');
     }
 
     // Format date
@@ -73,35 +86,87 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Create request card
     function createRequestCard(request) {
-        const card = document.createElement('div');
-        card.className = 'request-card';
-        card.innerHTML = `
-            <div class="request-header">
-                <div class="request-id">${request.id}</div>
-                <div class="request-date">${formatDate(request.timestamp)}</div>
-            </div>
-            <div class="request-type">${request.projectType}</div>
-            <div class="request-details">
-                <h3>${request.name}</h3>
-                <p><i class="fas fa-envelope"></i> ${request.email}</p>
-                <p><i class="fas fa-align-left"></i> ${request.description}</p>
-                <div class="request-budget">
-                    <i class="fas fa-dollar-sign"></i> Budget: $${request.budget}
+        const date = new Date(request.timestamp).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        const isOrder = request.type === 'order';
+        const statusClass = request.status === 'completed' ? 'completed' : '';
+        
+        // Get project name from projectType
+        const projectName = getProjectName(request.projectType);
+        
+        return `
+            <div class="request-card ${isOrder ? 'order' : 'request'}">
+                <div class="request-header">
+                    <div class="request-type">
+                        <i class="fas ${isOrder ? 'fa-shopping-cart' : 'fa-question-circle'}"></i>
+                        ${isOrder ? 'Order' : 'Request'}
+                    </div>
+                    <div class="request-date">
+                        <i class="fas fa-clock"></i>
+                        ${date}
+                    </div>
                 </div>
-                <div class="request-actions">
-                    <button class="action-button ${request.status === 'completed' ? 'completed' : ''}" 
-                            onclick="toggleStatus('${request.id}')">
-                        <i class="fas ${request.status === 'completed' ? 'fa-check-circle' : 'fa-circle'}"></i>
-                        ${request.status === 'completed' ? 'Completed' : 'Mark as Complete'}
-                    </button>
-                    <button class="action-button delete" onclick="removeRequest('${request.id}')">
-                        <i class="fas fa-trash"></i>
-                        Remove
-                    </button>
+                <div class="request-content">
+                    <h3>${request.name}</h3>
+                    <p class="request-email">
+                        <i class="fas fa-envelope"></i>
+                        ${request.email}
+                    </p>
+                    <p class="request-project">
+                        <i class="fas fa-project-diagram"></i>
+                        Project: ${projectName}
+                    </p>
+                    ${isOrder ? `
+                        <p class="request-plan">
+                            <i class="fas fa-tag"></i>
+                            Plan: ${request.plan}
+                        </p>
+                    ` : ''}
+                    <p class="request-description">
+                        <i class="fas fa-align-left"></i>
+                        ${isOrder ? request.requirements || 'No special requirements' : request.description}
+                    </p>
+                    ${request.budget ? `
+                        <p class="request-budget">
+                            <i class="fas fa-dollar-sign"></i>
+                            Budget: $${request.budget}
+                        </p>
+                    ` : ''}
+                    <div class="request-actions">
+                        <button onclick="toggleStatus('${request.id}')" class="status-button ${statusClass}">
+                            <i class="fas ${request.status === 'completed' ? 'fa-check-circle' : 'fa-circle'}"></i>
+                            ${request.status === 'completed' ? 'Completed' : 'Mark as Done'}
+                        </button>
+                        <button onclick="removeRequest('${request.id}')" class="delete-button">
+                            <i class="fas fa-trash"></i>
+                            Delete
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
-        return card;
+    }
+
+    // Helper function to get pretty project name
+    function getProjectName(projectType) {
+        const projectNames = {
+            'adobe-stock-automation': 'Adobe Stock Automation',
+            'linkedin-job-finder': 'LinkedIn Job Finder',
+            'instagram-unsend': 'Instagram Unsend',
+            'medium-auto-publisher': 'Medium Auto-Publisher',
+            'browser-extension': 'Browser Extension',
+            'web-scraping': 'Web Scraping Bot',
+            'social-media': 'Social Media Bot',
+            'data-automation': 'Data Automation Bot',
+            'custom-bot': 'Custom Bot Solution'
+        };
+        return projectNames[projectType] || projectType;
     }
 
     // Toggle request status
@@ -143,19 +208,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function filterAndDisplayRequests() {
         const searchTerm = searchInput.value.toLowerCase();
         const typeValue = typeFilter.value.toLowerCase();
+        const requestTypeValue = document.getElementById('requestTypeFilter').value;
         const statusValue = statusFilter.value.toLowerCase();
 
         const filteredRequests = allRequests.filter(request => {
             const matchesSearch = 
                 request.name.toLowerCase().includes(searchTerm) ||
                 request.email.toLowerCase().includes(searchTerm) ||
-                request.description.toLowerCase().includes(searchTerm) ||
+                (request.description || request.requirements || '').toLowerCase().includes(searchTerm) ||
                 request.projectType.toLowerCase().includes(searchTerm);
 
             const matchesType = !typeValue || request.projectType.toLowerCase() === typeValue;
+            const matchesRequestType = !requestTypeValue || request.type === requestTypeValue;
             const matchesStatus = !statusValue || (request.status || 'pending') === statusValue;
 
-            return matchesSearch && matchesType && matchesStatus;
+            return matchesSearch && matchesType && matchesRequestType && matchesStatus;
         });
 
         requestsContainer.innerHTML = '';
@@ -174,17 +241,59 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Event listeners
-    searchInput.addEventListener('input', filterAndDisplayRequests);
-    typeFilter.addEventListener('change', filterAndDisplayRequests);
-    statusFilter.addEventListener('change', filterAndDisplayRequests);
-    clearFiltersBtn.addEventListener('click', () => {
-        searchInput.value = '';
-        typeFilter.value = '';
-        statusFilter.value = '';
-        filterAndDisplayRequests();
-    });
+    // Filter requests
+    function filterRequests() {
+        const searchInput = document.getElementById('searchInput');
+        const typeFilter = document.getElementById('typeFilter');
+        const requestTypeFilter = document.getElementById('requestTypeFilter');
+        
+        const requests = JSON.parse(localStorage.getItem('projectRequests') || '[]');
+        const filteredRequests = requests.filter(request => {
+            const matchesSearch = !searchInput.value || 
+                request.name.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+                request.email.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+                (request.description && request.description.toLowerCase().includes(searchInput.value.toLowerCase()));
+                
+            const matchesType = !typeFilter.value || request.projectType === typeFilter.value;
+            const matchesRequestType = !requestTypeFilter.value || request.type === requestTypeFilter.value;
+            
+            return matchesSearch && matchesType && matchesRequestType;
+        });
+        
+        const requestsContainer = document.getElementById('requestsContainer');
+        const noRequests = document.getElementById('noRequests');
+        
+        if (filteredRequests.length === 0) {
+            requestsContainer.innerHTML = '';
+            noRequests.style.display = 'flex';
+        } else {
+            noRequests.style.display = 'none';
+            requestsContainer.innerHTML = filteredRequests
+                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                .map(request => createRequestCard(request))
+                .join('');
+        }
+    }
 
-    // Initial load
-    loadRequests();
+    // Initialize filters
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('searchInput');
+        const typeFilter = document.getElementById('typeFilter');
+        const requestTypeFilter = document.getElementById('requestTypeFilter');
+        const clearFilters = document.getElementById('clearFilters');
+        
+        [searchInput, typeFilter, requestTypeFilter].forEach(filter => {
+            filter.addEventListener('input', filterRequests);
+        });
+        
+        clearFilters.addEventListener('click', () => {
+            searchInput.value = '';
+            typeFilter.value = '';
+            requestTypeFilter.value = '';
+            filterRequests();
+        });
+        
+        // Initial load
+        loadRequests();
+    });
 });
